@@ -13,4 +13,4 @@ app.include_router(orders.router)
 
 @app.get("/")
 def root():
-    return {"message": "Bem-vindo ao Food Delivery Chatbot API!"}
+    return {"Bem-vindo ao Food Delivery Chatbot API!"}

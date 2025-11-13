@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
-class MessageBase(BaseModel):
+class ChatRequest(BaseModel):
     message: str
 
-class ChatResponse(MessageBase):
-    agent_response: str
+class ChatResponse(BaseModel):
     user_message: str
+    agent_response: str

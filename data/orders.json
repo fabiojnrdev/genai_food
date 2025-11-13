@@ -1,0 +1,104 @@
+{
+    "pedidos": [
+        {
+            "id": 1,
+            "restaurante": "Pizzaria Saborosa",
+            "categoria": "Pizza",
+            "itens": [
+                {"nome": "Pizza Margherita", "quantidade": 1, "preco": 35.00},
+                {"nome": "Refrigerante 2L", "quantidade": 1, "preco": 8.00}
+            ],
+            "total": 43.00
+        },
+        {
+            "id": 2,
+            "restaurante": "Pizzaria Saborosa",
+            "categoria": "Pizza",
+            "itens": [
+                {"nome": "Pizza Calabresa", "quantidade": 2, "preco": 38.00},
+                {"nome": "Cerveja", "quantidade": 1, "preco": 12.00}
+            ],
+            "total": 50.00
+        },
+        {
+            "id": 3,
+            "restaurante": "Veg & Go",
+            "categoria": "Comida Vegana",
+            "itens": [
+                {"nome": "Bowl Verde", "quantidade": 1, "preco": 32.00},
+                {"nome": "Suco Natural", "quantidade": 1, "preco": 10.00}
+            ],
+            "total": 42.00
+        },
+        {
+            "id": 4,
+            "restaurante": "Veg & Go",
+            "categoria": "Comida Vegana",
+            "itens": [
+                {"nome": "Wrap Vegano", "quantidade": 2, "preco": 28.00},
+                {"nome": "Chá Gelado", "quantidade": 1, "preco": 6.00}
+            ],
+            "total": 34.00
+        },
+        {
+            "id": 5,
+            "restaurante": "Tô com Fome Burgers",
+            "categoria": "Hambúrguer",
+            "itens": [
+                {"nome": "Burger Duplo", "quantidade": 1, "preco": 30.00},
+                {"nome": "Batata Frita", "quantidade": 1, "preco": 12.00}
+            ],
+            "total": 42.00
+        },
+        {
+            "id": 6,
+            "restaurante": "Tô com Fome Burgers",
+            "categoria": "Hambúrguer",
+            "itens": [
+                {"nome": "Combo Burger", "quantidade": 2, "preco": 45.00},
+                {"nome": "Milkshake", "quantidade": 1, "preco": 14.00}
+            ],
+            "total": 59.00
+        },
+        {
+            "id": 7,
+            "restaurante": "Sushi Master",
+            "categoria": "Comida Japonesa",
+            "itens": [
+                {"nome": "Sushi Premium", "quantidade": 1, "preco": 55.00},
+                {"nome": "Edamame", "quantidade": 1, "preco": 15.00}
+            ],
+            "total": 70.00
+        },
+        {
+            "id": 8,
+            "restaurante": "Sushi Master",
+            "categoria": "Comida Japonesa",
+            "itens": [
+                {"nome": "Temaki", "quantidade": 2, "preco": 28.00},
+                {"nome": "Água", "quantidade": 1, "preco": 3.00}
+            ],
+            "total": 31.00
+        },
+        {
+            "id": 9,
+            "restaurante": "Delícias do Mar",
+            "categoria": "Frutos do Mar",
+            "itens": [
+                {"nome": "Moqueca de Peixe", "quantidade": 1, "preco": 58.00},
+                {"nome": "Arroz", "quantidade": 1, "preco": 8.00}
+            ],
+            "total": 66.00
+        },
+        {
+            "id": 10,
+            "restaurante": "Delícias do Mar",
+            "categoria": "Frutos do Mar",
+            "itens": [
+                {"nome": "Camarão na Panela", "quantidade": 1, "preco": 65.00},
+                {"nome": "Cerveja Artesanal", "quantidade": 1, "preco": 15.00}
+            ],
+            "total": 80.00
+        }
+    ]
+}
