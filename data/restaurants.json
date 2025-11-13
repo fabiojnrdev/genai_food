@@ -1,0 +1,11 @@
+[
+  {"nome": "Pizzaria Saborosa", "categoria": "Pizza", "nota média": 4.7},
+  {"nome": "Veg & Go", "categoria": "Comida Vegana", "nota média": 4.8},
+  {"nome": "Tô com Fome Burgers", "categoria": "Hambúrguer", "nota média": 4.5},
+  {"nome": "Restaurante Toca da Fome", "categoria": "Marmita", "nota média": 4.5},
+  {"nome": "Sushi Master", "categoria": "Comida Japonesa", "nota média": 4.9},
+  {"nome": "Churrascaria Boi na Brasa", "categoria": "Churrasco", "nota média": 4.6},
+  {"nome": "La Pasta", "categoria": "Comida Italiana", "nota média": 4.4},
+  {"nome": "Café do Bairro", "categoria": "Café", "nota média": 4.3},
+  {"nome": "Delícias do Mar", "categoria": "Frutos do Mar", "nota média": 4.7}
+]
