@@ -3,7 +3,7 @@ from api.services.recommender import get_recommendation
 # Mapeamento de intenções por palavras-chave
 _INTENT_KEYWORDS: dict[str, list[str]] = {
     "order_status": ["pedido", "rastrear", "rastreio", "onde está", "status", "entrega"],
-    "recommendation": ["recomenda", "sugest", "restaurante", "onde comer", "quero comer", "com fome"],
+    "recommendation": ["recomenda", "sugest", "restaurante", "onde comer", "quero comer", "com fome", "comer"],
     "greeting": ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "hey"],
     "help": ["ajuda", "help", "o que você faz", "como funciona", "menu"],
 }
