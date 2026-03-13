@@ -1,0 +1,5 @@
+{
+  "model_name": "distilbert-base-multilingual-cased",
+  "num_labels": 4,
+  "labels": ["pedido", "recomendacao", "saudacao", "fallback"]
+}

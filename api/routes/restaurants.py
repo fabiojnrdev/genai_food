@@ -1,33 +1,45 @@
+import json
+from pathlib import Path
+
 from fastapi import APIRouter, HTTPException
 from typing import List
+
 from api.schemas.restaurants_schemas import Restaurant, RestaurantCreate
 
 router = APIRouter(prefix="/restaurants", tags=["restaurants"])
-restaurants_db = [
-    {"id": 1, "nome": "Pizzaria Saborosa", "categoria": "Pizza", "nota_media": 4.7},
-    {"id": 2, "nome": "Veg & Go", "categoria": "Comida Vegana", "nota_media": 4.8},
-    {"id": 3, "nome": "Tô com Fome Burgers", "categoria": "Hambúrguer", "nota_media": 4.5},
-    {"id": 4, "nome": "Restaurante Toca da Fome", "categoria": "Marmita", "nota_media": 4.5},
-    {"id": 5, "nome": "Sushi Master", "categoria": "Comida Japonesa", "nota_media": 4.9},
-    {"id": 6, "nome": "Churrascaria Boi na Brasa", "categoria": "Churrasco", "nota_media": 4.6},
-    {"id": 7, "nome": "La Pasta", "categoria": "Comida Italiana", "nota_media": 4.4},
-    {"id": 8, "nome": "Café do Bairro", "categoria": "Café", "nota_media": 4.3},
-    {"id": 9, "nome": "Delícias do Mar", "categoria": "Frutos do Mar", "nota_media": 4.7},
-]
+
+DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "restaurants.json"
+
+
+def _load_restaurants() -> list[dict]:
+    with DATA_PATH.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _save_restaurants(data: list[dict]) -> None:
+    with DATA_PATH.open("w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
 @router.get("/", response_model=List[Restaurant])
 def list_restaurants():
-    return restaurants_db
-@router.post("/{restaurant_id}", response_model=Restaurant)
+    return _load_restaurants()
+
+
+@router.get("/{restaurant_id}", response_model=Restaurant)  # era POST — corrigido para GET
 def get_restaurant(restaurant_id: int):
-    for restaurant in restaurants_db:
+    restaurants = _load_restaurants()
+    for restaurant in restaurants:
         if restaurant["id"] == restaurant_id:
             return restaurant
     raise HTTPException(status_code=404, detail="Restaurante não encontrado")
-@router.post("/", response_model=Restaurant)
+
+
+@router.post("/", response_model=Restaurant, status_code=201)
 def add_restaurant(restaurant: RestaurantCreate):
-    new_restaurant = {
-        "id": len(restaurants_db) + 1,
-        **restaurant.dict()
-    }
-    restaurants_db.append(new_restaurant)
+    restaurants = _load_restaurants()
+    new_id = max((r["id"] for r in restaurants), default=0) + 1
+    new_restaurant = {"id": new_id, **restaurant.model_dump()}
+    restaurants.append(new_restaurant)
+    _save_restaurants(restaurants)
     return new_restaurant

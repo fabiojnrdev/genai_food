@@ -1,11 +1,20 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-class Restaurant(BaseModel):
+
+class RestaurantBase(BaseModel):
+    name: str
+    category: str
+    rating: float = Field(..., ge=0.0, le=5.0)
+    address: str
+    phone: str
+
+
+class RestaurantCreate(RestaurantBase):
+    pass
+
+
+class Restaurant(RestaurantBase):
     id: int
-    nome: str
-    categoria: str
-    nota_media: float
-class RestaurantCreate(BaseModel):
-    nome: str
-    categoria: str
-    nota_media: float
+
+    class Config:
+        from_attributes = True

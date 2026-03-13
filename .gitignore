@@ -1,0 +1,5 @@
+*.bin
+*.pt
+__pycache__/
+.env
+model/trained/pytorch_model.bin

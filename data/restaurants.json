@@ -1,11 +1,74 @@
 [
-  {"nome": "Pizzaria Saborosa", "categoria": "Pizza", "nota média": 4.7},
-  {"nome": "Veg & Go", "categoria": "Comida Vegana", "nota média": 4.8},
-  {"nome": "Tô com Fome Burgers", "categoria": "Hambúrguer", "nota média": 4.5},
-  {"nome": "Restaurante Toca da Fome", "categoria": "Marmita", "nota média": 4.5},
-  {"nome": "Sushi Master", "categoria": "Comida Japonesa", "nota média": 4.9},
-  {"nome": "Churrascaria Boi na Brasa", "categoria": "Churrasco", "nota média": 4.6},
-  {"nome": "La Pasta", "categoria": "Comida Italiana", "nota média": 4.4},
-  {"nome": "Café do Bairro", "categoria": "Café", "nota média": 4.3},
-  {"nome": "Delícias do Mar", "categoria": "Frutos do Mar", "nota média": 4.7}
+  {
+    "id": 1,
+    "name": "Pizzaria Saborosa",
+    "category": "Pizza",
+    "rating": 4.7,
+    "address": "Rua das Flores, 123",
+    "phone": "(86) 99999-0001"
+  },
+  {
+    "id": 2,
+    "name": "Veg & Go",
+    "category": "Comida Vegana",
+    "rating": 4.8,
+    "address": "Av. Verde, 456",
+    "phone": "(86) 99999-0002"
+  },
+  {
+    "id": 3,
+    "name": "Tô com Fome Burgers",
+    "category": "Hambúrguer",
+    "rating": 4.5,
+    "address": "Rua do Hambúrguer, 789",
+    "phone": "(86) 99999-0003"
+  },
+  {
+    "id": 4,
+    "name": "Restaurante Toca da Fome",
+    "category": "Marmita",
+    "rating": 4.5,
+    "address": "Rua da Marmita, 321",
+    "phone": "(86) 99999-0004"
+  },
+  {
+    "id": 5,
+    "name": "Sushi Master",
+    "category": "Comida Japonesa",
+    "rating": 4.9,
+    "address": "Av. Japão, 654",
+    "phone": "(86) 99999-0005"
+  },
+  {
+    "id": 6,
+    "name": "Churrascaria Boi na Brasa",
+    "category": "Churrasco",
+    "rating": 4.6,
+    "address": "Estrada do Boi, 987",
+    "phone": "(86) 99999-0006"
+  },
+  {
+    "id": 7,
+    "name": "La Pasta",
+    "category": "Comida Italiana",
+    "rating": 4.4,
+    "address": "Rua da Itália, 111",
+    "phone": "(86) 99999-0007"
+  },
+  {
+    "id": 8,
+    "name": "Café do Bairro",
+    "category": "Café",
+    "rating": 4.3,
+    "address": "Rua do Café, 222",
+    "phone": "(86) 99999-0008"
+  },
+  {
+    "id": 9,
+    "name": "Delícias do Mar",
+    "category": "Frutos do Mar",
+    "rating": 4.7,
+    "address": "Av. do Litoral, 333",
+    "phone": "(86) 99999-0009"
+  }
 ]

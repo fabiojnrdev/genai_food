@@ -1,1 +1,25 @@
-2
+text,intent
+
+"meu pedido já chegou?",status_pedido
+"quando meu pedido vai chegar?",status_pedido
+"qual o status da minha entrega?",status_pedido
+"onde está meu pedido?",status_pedido
+"meu pedido foi entregue",status_pedido
+
+"me recomenda algo para comer",recomendacao
+"quero sugestão de restaurante",recomendacao
+"qual restaurante você indica?",recomendacao
+"me dá uma recomendação de comida",recomendacao
+"sugere um lugar para jantar", recomendacao
+
+"olá",saudacao
+"oi, tudo bem?",saudacao
+"bom dia",saudacao
+"boa noite",saudacao
+"boa tarde", saudacao
+
+"não sei o que pedir",desconhecido
+"não entendi",desconhecido
+"???",desconhecido
+"fala qualquer coisa aí",desconhecido
+"blá blá blá",desconhecido
