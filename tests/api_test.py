@@ -3,16 +3,56 @@ Testes de integração para as rotas da API.
 
 Estratégia:
 - Restaurantes: mockamos _load_restaurants e _save_restaurants para não tocar o JSON real.
-- Orders: cada teste recebe a lista orders_db limpa via fixture.
+- Orders: banco SQLite em memória (:memory:) injetado via override de dependência do FastAPI.
+  Isso garante isolamento total — cada sessão de testes começa com banco limpo.
 - Chat: mockamos process_user_message para isolar a rota do serviço NLP.
 """
 
-import json
 import pytest
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, event
+from sqlalchemy.orm import sessionmaker
 
 from api.main import app
+from api.database import Base, get_db
+from api.config import get_settings, Settings
+from api.models import order_model  # noqa: F401 — registra OrderModel no Base.metadata
+
+# ---------------------------------------------------------------------------
+# Banco em memória para testes de orders
+#
+# SQLite :memory: isola cada conexão — se create_all e a sessão usarem
+# conexões diferentes, a tabela não existe para a sessão.
+# Solução: criar UMA conexão única e forçar todas as operações nela.
+# ---------------------------------------------------------------------------
+
+TEST_DATABASE_URL = "sqlite:///:memory:"
+
+test_engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+)
+
+# Conexão única reutilizada por toda a sessão de testes
+_connection = test_engine.connect()
+
+TestingSessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=_connection,   # sessão vinculada à mesma conexão do create_all
+)
+
+
+def override_get_db():
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
 
@@ -41,15 +81,16 @@ MOCK_RESTAURANTS = [
 
 
 @pytest.fixture(autouse=True)
-def clear_orders_db():
-    """Limpa o banco de pedidos em memória antes de cada teste."""
-    from api.routes import orders as orders_module
-    orders_module.orders_db.clear()
+def setup_database():
+    """
+    Cria tabelas na conexão compartilhada antes de cada teste.
+    Usa transação aninhada (SAVEPOINT) para rollback limpo ao final —
+    sem precisar recriar o schema a cada teste.
+    """
+    Base.metadata.create_all(bind=_connection)
+    transaction = _connection.begin_nested()   # SAVEPOINT
     yield
-    orders_module.orders_db.clear()
-
-
-from api.config import get_settings, Settings
+    transaction.rollback()                     # desfaz dados do teste
 
 
 # ---------------------------------------------------------------------------
