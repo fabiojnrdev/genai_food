@@ -12,3 +12,5 @@ requests
 rich
 httpx
 pytest
+python-jose[cryptography]
+passlib[bcrypt]
