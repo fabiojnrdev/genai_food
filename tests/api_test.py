@@ -49,6 +49,41 @@ def clear_orders_db():
     orders_module.orders_db.clear()
 
 
+from api.config import get_settings, Settings
+
+
+# ---------------------------------------------------------------------------
+# Settings / config
+# ---------------------------------------------------------------------------
+
+class TestSettings:
+    def test_default_env_is_dev(self):
+        get_settings.cache_clear()
+        s = Settings()
+        assert s.env == "dev"
+
+    def test_is_dev_property(self):
+        s = Settings(env="dev")
+        assert s.is_dev is True
+
+    def test_is_not_dev_in_prod(self):
+        s = Settings(env="prod")
+        assert s.is_dev is False
+
+    def test_hf_api_url_contains_model_name(self):
+        s = Settings(hf_model="some-org/some-model")
+        assert "some-org/some-model" in s.hf_api_url
+
+    def test_hf_api_key_not_exposed_in_repr(self):
+        s = Settings(hf_api_key="hf_secret123")
+        assert "hf_secret123" not in repr(s)
+
+    def test_restaurants_data_path_is_path_instance(self):
+        from pathlib import Path
+        s = Settings()
+        assert isinstance(s.restaurants_data_path, Path)
+
+
 # ---------------------------------------------------------------------------
 # GET /
 # ---------------------------------------------------------------------------
@@ -122,7 +157,7 @@ class TestAddRestaurant:
         "name": "Burger King",
         "category": "Hambúrguer",
         "rating": 4.2,
-        "address": "Av. Principal, 121",
+        "address": "Av. Principal, 1",
         "phone": "(86) 99999-9999",
     }
 

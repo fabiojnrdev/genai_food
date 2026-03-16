@@ -6,9 +6,11 @@ import uvicorn
 from rich.console import Console
 from rich.table import Table
 
+from api.config import settings
+
 console = Console()
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = f"http://{settings.api_host}:{settings.api_port}"
 
 MONITORED_ENDPOINTS = {
     "Root":        ("GET",  "/"),
@@ -62,8 +64,12 @@ def monitor_api() -> None:
 
 
 def start_server() -> None:
-    # Corrigido: módulo era "app:app" mas o objeto FastAPI está em api.main:app
-    uvicorn.run("api.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run(
+        "api.main:app",
+        host=settings.api_host,
+        port=settings.api_port,
+        reload=settings.is_dev,
+    )
 
 
 if __name__ == "__main__":

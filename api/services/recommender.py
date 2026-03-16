@@ -1,13 +1,11 @@
 import json
 import random
-from pathlib import Path
 
-# Caminho absoluto a partir da raiz do projeto, independente de onde o módulo é importado
-DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "restaurants.json"
+from api.config import settings
 
 
 def _load_restaurants() -> list[dict]:
-    with DATA_PATH.open(encoding="utf-8") as f:
+    with settings.restaurants_data_path.open(encoding="utf-8") as f:
         return json.load(f)
 
 
