@@ -122,7 +122,7 @@ class TestAddRestaurant:
         "name": "Burger King",
         "category": "Hambúrguer",
         "rating": 4.2,
-        "address": "Av. Principal, 1",
+        "address": "Av. Principal, 121",
         "phone": "(86) 99999-9999",
     }
 

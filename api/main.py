@@ -5,7 +5,7 @@ from api.routes import chat, restaurants, orders
 app = FastAPI(
     title="Food Delivery Chatbot API",
     description="Agente inteligente para recomendação e atendimento em delivery de comida.",
-    version="1.0.0",
+    version="1.1.2",
 )
 
 app.include_router(chat.router)

@@ -3,3 +3,4 @@
 __pycache__/
 .env
 model/trained/pytorch_model.bin
+.env
