@@ -449,3 +449,39 @@ class TestAuthProtection:
         response = client.get("/orders/", headers={"X-API-Key": "chave-invalida"})
         app.dependency_overrides[get_current_user] = lambda: "test-user"
         assert response.status_code == 401
+
+# ---------------------------------------------------------------------------
+# Middleware e handlers de erro
+# ---------------------------------------------------------------------------
+
+class TestErrorHandlers:
+    def test_404_returns_json_error_format(self):
+        response = client.get("/rota-que-nao-existe")
+        assert response.status_code == 404
+        body = response.json()
+        assert "error" in body
+        assert "status" in body["error"]
+        assert "message" in body["error"]
+
+    def test_422_returns_json_error_format_with_details(self):
+        # POST em /orders sem body obrigatório → 422
+        response = client.post("/orders/", json={})
+        assert response.status_code == 422
+        body = response.json()
+        assert "error" in body
+        assert "details" in body["error"]
+        assert isinstance(body["error"]["details"], list)
+
+    def test_401_returns_json_error_format(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.get("/orders/")
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
+        body = response.json()
+        assert "error" in body
+
+    def test_request_logging_does_not_break_response(self):
+        """O middleware de log não deve alterar o conteúdo da resposta."""
+        response = client.get("/")
+        assert response.status_code == 200
+        assert response.json()["message"] is not None
