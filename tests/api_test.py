@@ -190,7 +190,7 @@ class TestGetRestaurant:
     def test_returns_404_for_unknown_id(self, _mock):
         response = client.get("/restaurants/999")
         assert response.status_code == 404
-        assert "não encontrado" in response.json()["detail"].lower()
+        assert "não encontrado" in response.json()["error"]["message"].lower()
 
 
 # ---------------------------------------------------------------------------

@@ -9,6 +9,8 @@ torch
 transformers
 scikit-learn
 requests
+urllib3>=2.2,<2.4
+chardet>=3.0.2,<6
 rich
 httpx
 pytest
