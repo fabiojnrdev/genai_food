@@ -3,12 +3,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from api.database import init_db
-from api.routes import chat, restaurants, orders
+from api.routes import auth, chat, restaurants, orders
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Substitui @app.on_event("startup") — padrão atual do FastAPI."""
     init_db()
     yield
 
@@ -20,6 +19,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.include_router(auth.router)
 app.include_router(chat.router)
 app.include_router(restaurants.router)
 app.include_router(orders.router)

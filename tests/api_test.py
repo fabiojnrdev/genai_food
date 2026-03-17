@@ -17,7 +17,7 @@ from sqlalchemy.orm import sessionmaker
 from api.main import app
 from api.database import Base, get_db
 from api.config import get_settings, Settings
-from api.models import order_model  # noqa: F401 — registra OrderModel no Base.metadata
+from api.models import order_model, user_model  # noqa: F401 — registra models no Base.metadata
 
 # ---------------------------------------------------------------------------
 # Banco em memória para testes de orders
@@ -53,6 +53,10 @@ def override_get_db():
 
 
 app.dependency_overrides[get_db] = override_get_db
+
+# Bypass de autenticação para os testes existentes
+from api.services.auth_service import get_current_user
+app.dependency_overrides[get_current_user] = lambda: "test-user"
 
 client = TestClient(app)
 
@@ -364,3 +368,84 @@ class TestChatEndpoint:
         response = client.post("/chat/message", json={"message": "qualquer coisa"})
         assert response.json()["agent_response"] == "Resposta mockada"
         mock_nlp.assert_called_once_with("qualquer coisa")
+
+# ---------------------------------------------------------------------------
+# Auth — /auth/register e /auth/token
+# ---------------------------------------------------------------------------
+
+class TestAuthRegister:
+    def test_register_returns_201(self):
+        # Remove override de auth para testar as rotas de auth diretamente
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.post("/auth/register", json={"username": "fabio", "password": "senha123"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 201
+
+    def test_register_returns_user_fields(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.post("/auth/register", json={"username": "fabio2", "password": "senha123"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        body = response.json()
+        assert body["username"] == "fabio2"
+        assert "password" not in body
+        assert body["is_active"] is True
+
+    def test_register_duplicate_returns_409(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        client.post("/auth/register", json={"username": "duplicado", "password": "senha123"})
+        response = client.post("/auth/register", json={"username": "duplicado", "password": "outrasenha"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 409
+
+
+class TestAuthToken:
+    def test_login_returns_token(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        client.post("/auth/register", json={"username": "tokenuser", "password": "senha123"})
+        response = client.post("/auth/token", json={"username": "tokenuser", "password": "senha123"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 200
+        assert "access_token" in response.json()
+        assert response.json()["token_type"] == "bearer"
+
+    def test_login_wrong_password_returns_401(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        client.post("/auth/register", json={"username": "wrongpass", "password": "certa"})
+        response = client.post("/auth/token", json={"username": "wrongpass", "password": "errada"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
+
+    def test_login_unknown_user_returns_401(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.post("/auth/token", json={"username": "naoexiste", "password": "qualquer"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
+
+
+class TestAuthProtection:
+    """Garante que as rotas retornam 401 sem credenciais."""
+
+    def test_get_restaurants_without_auth_returns_401(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.get("/restaurants/")
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
+
+    def test_get_orders_without_auth_returns_401(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.get("/orders/")
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
+
+    def test_api_key_header_grants_access(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.get("/restaurants/", headers={"X-API-Key": "chave-dev-1"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        # 200 ou 500 de IO são aceitáveis — o que não pode é 401
+        assert response.status_code != 401
+
+    def test_invalid_api_key_returns_401(self):
+        app.dependency_overrides.pop(get_current_user, None)
+        response = client.get("/orders/", headers={"X-API-Key": "chave-invalida"})
+        app.dependency_overrides[get_current_user] = lambda: "test-user"
+        assert response.status_code == 401
